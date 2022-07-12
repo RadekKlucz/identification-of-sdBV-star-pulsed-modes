@@ -1,0 +1,33 @@
+# kompiluje wszystkie pliki fortranowskie w kartotece
+# uzywa kompilatora gfortranu
+
+echo
+echo
+echo Compiling all fortran files:
+echo
+i=0
+for file in `ls *.f`
+
+do  
+
+i=$[i+1]
+
+# nazwa pliku bez sciezki
+name=$(basename $file)
+echo $i. $name
+# rozszerzenie
+n_ext="${name##*.}"
+#echo $n_ext
+# sama nazwa pliku bez rozszerzenia
+name_noext="${name%.*}"
+#echo $name_noext
+
+#gfortran -Wall -c $name_noext.$n_ext
+
+gfortran -Wall -o $name_noext $name_noext.$n_ext
+
+echo "                     =>  "  $name_noext
+
+done
+
+echo
