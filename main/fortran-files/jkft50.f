@@ -19,7 +19,7 @@ cjk      print *,' input file:   ', infile
       write(*,*)
       
       open (1,file=infile,status='old')
-      open (2,file='ft50.trf')
+      open (2,file='./output/ft50.trf')
 c      open (3,file='pspec.peaks')
       pi=3.141592653589793d0
 C skip comment lines
@@ -39,7 +39,7 @@ C count data lines
         read (1,*,end=15) tin
         icnt = icnt + 1
       enddo
-15    print *,' liczba pktow wejsciowych: ',icnt
+15    print *,' Number of entry points: ',icnt
 C allocate memory
       allocate (t(icnt), STAT=ierror)
       if ( ierror /= 0 ) then
@@ -78,7 +78,7 @@ c      read *, ofac
 c
       call AVEVAR(a,np,ave,var)
 c
-      print *,'                  srednia: ',ave
+      print *,'                  average: ',ave
 cjk      print *,' Variance of data points=',var
 c
       hifac=fmax/fnyqav
@@ -146,7 +146,7 @@ c        endif
 c      enddo
 c
       write(*,*)
-      write(*,*) '     FT zapisano na pliku:     ft50.trf' 
+      write(*,*) '     FT save in file:     ft50.trf' 
       write(*,*)
       stop
       end

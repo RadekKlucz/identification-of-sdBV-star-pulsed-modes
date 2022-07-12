@@ -13,15 +13,15 @@ class CheckSystem:
         while True:
             if self.system == 'linux':
                 print('Good son!')
-                playsound('u-got-that.mp3')
+                playsound('./mp3-files/u-got-that.mp3')
                 break
             if self.system != 'linux':
                 print('Again!')
-                playsound('error.mp3')
+                playsound('./mp3-files/error.mp3')
                 self.system = input()
             if self.system == 'windows':
                 print('Seriously? Do not use this script!')
-                playsound('ultra.mp3')
+                playsound('./mp3-files/ultra.mp3')
                 break
 
 
@@ -65,13 +65,13 @@ class CommandNoise:
         return noise_4_sigma
 
 
-def Fourier_transformation(data, programe='./jkft50 '):
+def Fourier_transformation(data, programe='./fortran-files/jkft50 '):
     """A function that executes a class CommandFt for a command object, 
     the result of which is the ft50.trf file with data after 
     the Fourier transform has been computed."""
     #check_system = input('Enter your system (Windows or Linux):')
     # if check_system == 'Linux':
-    command = CommandFt('chmod u+x ./fortran-files/compall', './fortran-files/compall',
+    command = CommandFt('chmod u+x ./compall', 'cd fortran-files && ./compall',
                         programe + data)  # change data if you want
     return command.compile_the_files(), command.run_ft()
     # else:
@@ -85,7 +85,7 @@ def Calculate_the_noise_level():
     the limitation of the jkft50 program"""
     #check_system = input('Enter your system (Windows or Linux):')
     # if check_system == 'Linux':
-    comand_1 = CommandNoise('./fortran-files/ftnoise ft50.trf 0 50')
+    comand_1 = CommandNoise('./fortran-files/ftnoise ./output/ft50.trf 0 50')
     return comand_1.run_noise()
     # else:
     #    return print('This version is not compatible with Windows. Use the fortran script and load data with the loader')
