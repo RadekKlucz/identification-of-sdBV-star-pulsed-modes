@@ -1,8 +1,8 @@
 #from concurrent.futures.process import _check_system_limits
-from sqlite3 import ProgrammingError
 from subprocess import run
 from os import popen
 from playsound import playsound
+
 
 
 class CheckSystem:
