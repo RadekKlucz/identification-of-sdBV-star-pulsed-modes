@@ -1,11 +1,23 @@
+"""
+load.py: 
+"""
+ 
+__name__ = "load"
+__author__ = "Radoslaw Kluczewski"
+__license__ = "MIT"
+__version__ = "1.5"
+__status__ = "accomplished" 
+
+from subprocess import run
+from os import popen
 from scipy.signal import find_peaks
 # from comands import Calculate_the_noise_level
 import pandas as pd
 import numpy as np
 import function as fc
+import fourier as ft
 import math
 import matplotlib.pyplot as plt
-import ft 
 
 
 class LoadAndFind:
