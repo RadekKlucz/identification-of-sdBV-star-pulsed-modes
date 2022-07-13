@@ -44,8 +44,3 @@ class Function:
         for i in list:
             averages.append(np.average(i))
         return averages
-
-
-# def Gauss(x, H, A, mu, sigma):
- #   variables = Function(x, H, A, mu, sigma)
-  #  return variables.gauss(x, H, A, mu, sigma)
