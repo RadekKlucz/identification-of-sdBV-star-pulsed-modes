@@ -1,4 +1,3 @@
-# from click import command
 from scipy.signal import find_peaks
 # from comands import Calculate_the_noise_level
 import pandas as pd
@@ -6,16 +5,24 @@ import numpy as np
 import function as fc
 import math
 import matplotlib.pyplot as plt
+import ft 
 
 
 class LoadAndFind:
     '''Opisac zmienne w szczegolnosci to ppt. Dac przykład??'''
 
     def __init__(self):
-        self.ft_data = pd.read_csv(
-            './output/ft50.trf', sep='\s+', header=None)  # data ft50.trf
-        self.frequencies = self.ft_data[0]  # list axis x in data
-        self.ppt = list(self.ft_data[1])  # list axis y in data
+        # self.ft_data = pd.read_csv(
+         #   './output/ft50.trf', sep='\s+', header=None)  # data ft50.trf
+
+        # self.frequencies = self.ft_data[0]  # list axis x in data
+        # self.ppt = list(self.ft_data[1])  # list axis y in data
+        self.ft_data = pd.read_csv('./data/sdB93.dane', header=None, sep='\s+')
+        self.data_column_1 = self.ft_data[0]
+        self.data_column_2 = self.ft_data[1]
+
+        self.frequencies = ft.fourier_transformation_without_fortran(self.data_column_1, self.data_column_2)[0]
+        self.ppt = ft.fourier_transformation_without_fortran(self.data_column_1, self.data_column_2)[1] 
 
         self.noise = np.average(self.ppt) * 4
         self.peaks = find_peaks(
@@ -143,11 +150,10 @@ class Confirm(LoadAndFind):
         ''''''
         self.exported = self.export_data_periods.loc[self.export_data_periods['periods'] <= 20000]
         self.export_1 = self.exported.sort_values('periods')
+        self.data_confirm = ft.fourier_transformation_without_fortran(list(self.export_1['periods']), self.ppt[:len(self.export_1)], normalize_number=1)
         self.export_1.to_csv('data_sorted.trf', sep='\t',
                              header=None, index=None)
-
-        # Fourier_transformation(data='data_sorted.trf')
-        return pd.read_csv('p400.trf', sep='\s+', header=None)  # data ft50.trf
+        return self.data_confirm
 
 
 def Mods(mean, sigma, mean_1, sigma_1, mean_2, sigma_2, list):
