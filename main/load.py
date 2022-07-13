@@ -1,6 +1,6 @@
 # from click import command
 from scipy.signal import find_peaks
-from comands import Calculate_the_noise_level, Fourier_transformation
+# from comands import Calculate_the_noise_level
 import pandas as pd
 import numpy as np
 import function as fc
@@ -17,8 +17,9 @@ class LoadAndFind:
         self.frequencies = self.ft_data[0]  # list axis x in data
         self.ppt = list(self.ft_data[1])  # list axis y in data
 
+        self.noise = np.average(self.ppt) * 4
         self.peaks = find_peaks(
-            self.ppt, height=Calculate_the_noise_level())  # finding peaks
+            self.ppt, height=self.noise)  # finding peaks or put Calculate_the_noise_level() in height variable
         # list of the heights of the peaks
         self.height = self.peaks[1]['peak_heights']
         # list of the peaks position
@@ -97,7 +98,7 @@ class DistanceAndHistograms(LoadAndFind):
         self.xfit = np.arange(start_point_fit, end_point_fit)  # fitting gauss
         self.yfit = list()
         for i in self.xfit:
-            self.yfit.append(fc.Gauss(i, self.H, self.A, self.x0, self.sigma))
+            self.yfit.append(fc.Function.gauss(i, self.H, self.A, self.x0, self.sigma))
         return [self.xfit, self.yfit, self.x0, self.sigma]
 
 
@@ -131,7 +132,7 @@ class MachingMods(LoadAndFind):
         List_filtred.dropna(subset=[3], inplace=True)
         List_reset = List_filtred.reset_index(drop=True)
         List_filtred_latex = List_reset.to_latex(index=True)
-        return print(List_filtred_latex)
+        return List_reset
 
 
 class Confirm(LoadAndFind):
