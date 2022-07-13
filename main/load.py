@@ -9,7 +9,8 @@ import ft
 
 
 class LoadAndFind:
-    '''Opisac zmienne w szczegolnosci to ppt. Dac przykład??'''
+    """
+    """
 
     def __init__(self):
         # self.ft_data = pd.read_csv(
@@ -42,11 +43,12 @@ class LoadAndFind:
             {'periods': self.periods, 'ppt': self.ppt})  # export data in periods
 
     def export(self):
-        return self.export_data_periods.to_csv("ft50_periods.trf", sep='\t', header=None)
+        return self.export_data_periods.to_csv("./output/ft50_periods.trf", sep='\t', header=None)
 
 
 class SplitData(LoadAndFind):
-    '''do roznego poziomu sigma na wykresie'''
+    """
+    """
 
     def __init__(self):
         super().__init__()
@@ -64,10 +66,12 @@ class SplitData(LoadAndFind):
 
 
 class DistanceAndHistograms(LoadAndFind):
-    '''histogramy'''
+    """
+    """
 
     def __init__(self):
         super().__init__()
+
 
     def calculate_the_distance_between_peaks(self):
         self.distance_all = list()
@@ -76,8 +80,11 @@ class DistanceAndHistograms(LoadAndFind):
                 self.distance_all.append(math.dist([i], [j]))
         return self.distance_all
 
+
     def limiting(self, value_1, value_2, distance=None):
-        ''''''
+        """
+        """
+
         if distance is None:
             self.distance = self.calculate_the_distance_between_peaks()
         else:
@@ -89,8 +96,11 @@ class DistanceAndHistograms(LoadAndFind):
                 self.limiting_full.append(i)
         return self.limiting_full
 
+
     def fitting_gauss(self, data, start_interval, end_interval, start_point_fit, end_point_fit, bins=50):
-        '''dopasowanie gausa przedzialami na rysunek ogolem cale'''
+        """
+        """
+
         self.y, self.x, _ = plt.hist(data, bins, density=1,
                                      alpha=0.5, color='green')  # trimming the axis of the histogram
         self.start_trim_1 = math.floor(len(self.y) * start_interval)
@@ -110,7 +120,8 @@ class DistanceAndHistograms(LoadAndFind):
 
 
 class MachingMods(LoadAndFind):
-    ''''''
+    """
+    """
 
     def __init__(self, mean, sigma, mean_1, sigma_1, mean_2, sigma_2, list):
         super().__init__()
@@ -123,6 +134,9 @@ class MachingMods(LoadAndFind):
         self.list = list
 
     def assing_mods(self):
+        """
+        """
+
         self.L_List = list()
         for i in self.list:
             List_l = str()
@@ -133,30 +147,40 @@ class MachingMods(LoadAndFind):
             if fc.Function.is_mode(i, self.mean_2, self.sigma_2, self.list):
                 List_l += '3 '
             self.L_List.append(List_l)
-        List_filtred = pd.DataFrame((list(self.peak_position), self.peaks_periods,
+        self.List_filtred = pd.DataFrame((list(self.peak_position), self.peaks_periods,
                                     self.height, self.L_List)).T  # filttring empty rows
-        List_filtred[3].replace('', np.nan, inplace=True)
-        List_filtred.dropna(subset=[3], inplace=True)
-        List_reset = List_filtred.reset_index(drop=True)
-        List_filtred_latex = List_reset.to_latex(index=True)
-        return List_reset
+        self.List_filtred[3].replace('', np.nan, inplace=True)
+        self.List_filtred.dropna(subset=[3], inplace=True)
+        self.List_reset = self.List_filtred.reset_index(drop=True)
+        self.List_filtred_latex = self.List_reset.to_latex(index=True)
+        return self.List_reset, self.List_filtred_latex
 
 
 class Confirm(LoadAndFind):
+    """
+    """
     def __init__(self):
         super().__init__()
 
+
     def run_fourier_transformation(self):
-        ''''''
+        """
+        """
+
         self.exported = self.export_data_periods.loc[self.export_data_periods['periods'] <= 20000]
         self.export_1 = self.exported.sort_values('periods')
-        self.data_confirm = ft.fourier_transformation_without_fortran(list(self.export_1['periods']), self.ppt[:len(self.export_1)], normalize_number=1)
-        self.export_1.to_csv('data_sorted.trf', sep='\t',
+        self.data_confirm = ft.fourier_transformation_without_fortran(list(self.export_1['periods']), 
+                                                                      self.ppt[:len(self.export_1)], 
+                                                                      normalize_number=1)
+        self.export_1.to_csv('./output/data_sorted.trf', sep='\t',
                              header=None, index=None)
         return self.data_confirm
 
 
 def Mods(mean, sigma, mean_1, sigma_1, mean_2, sigma_2, list):
+    """
+    """
+
     variables = MachingMods(mean, sigma, mean_1,
                             sigma_1, mean_2, sigma_2, list)
     return variables.assing_mods()
