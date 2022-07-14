@@ -6,7 +6,7 @@ __name__ = "function"
 __author__ = "Radoslaw Kluczewski"
 __license__ = "MIT"
 __version__ = "1.3"
-__status__ = "production" 
+__status__ = "accomplished" 
 
 import numpy as np
 from scipy.optimize import curve_fit
