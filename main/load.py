@@ -212,8 +212,8 @@ class MachingMods(LoadAndFind):
         self.List_filtred[3].replace('', np.nan, inplace=True)
         self.List_filtred.dropna(subset=[3], inplace=True)
         self.List_reset = self.List_filtred.reset_index(drop=True)
-        self.List_filtred_latex = self.List_reset.to_latex(index=True)
-        return self.List_reset, self.List_filtred_latex
+        # self.List_filtred_latex = self.List_reset.to_latex(index=True)  # uncomment if you want to export to latex
+        return self.List_reset
 
 
 class Confirm(LoadAndFind):
@@ -233,14 +233,12 @@ class Confirm(LoadAndFind):
 
         self.exported = self.export_data_periods.loc[self.export_data_periods['periods'] <= 20000]
         self.export_1 = self.exported.sort_values('periods')
-        self.data_confirm = ft.fourier_transformation_without_fortran(list(self.export_1['periods']), 
-                                                                      self.ppt[:len(self.export_1)], 
-                                                                      normalize_number=1)
+        self.data_confirm = ft.fourier_transformation_without_fortran(list(self.export_1['periods']), self.ppt[:len(self.export_1)], 1)
         self.export_1.to_csv('./output/data_confirm.trf', sep='\t', header=None, index=None)
         return self.data_confirm
 
 
-def Mods(mean, sigma, mean_1, sigma_1, mean_2, sigma_2, list):
+def mods(mean, sigma, mean_1, sigma_1, mean_2, sigma_2, list):
     """
     The function of assigning modes and numbers of detected peaks. 
     For the function to work properly, you must use 2 parameters from the three histograms.
