@@ -66,7 +66,7 @@ class LoadAndFind:
         :returns: data file for exported periods 
         """
 
-        return self.export_data_periods.to_csv("./output/fourier_data_periods.trf", sep='\t', header=None)
+        return self.export_data_periods.to_csv("./output/data/fourier_data_periods.trf", sep='\t', header=None)
 
 
 class SplitData(LoadAndFind):
@@ -234,7 +234,7 @@ class Confirm(LoadAndFind):
         self.exported = self.export_data_periods.loc[self.export_data_periods['periods'] <= 20000]
         self.export_1 = self.exported.sort_values('periods')
         self.data_confirm = ft.fourier_transformation_without_fortran(list(self.export_1['periods']), self.ppt[:len(self.export_1)], 1)
-        self.export_1.to_csv('./output/data_confirm.trf', sep='\t', header=None, index=None)
+        self.export_1.to_csv('./output/data/data_confirm.trf', sep='\t', header=None, index=None)
         return self.data_confirm
 
 
