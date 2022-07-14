@@ -45,4 +45,3 @@ def fourier_transformation_without_fortran(time, amplitude, normalization_point=
     """
     output = FourierTransform(time, amplitude, normalization_point=6.1)
     return output.fourier_transform()
-

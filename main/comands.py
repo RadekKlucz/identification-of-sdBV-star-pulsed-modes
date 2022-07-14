@@ -81,7 +81,7 @@ class CommandNoise:
         return self.noise_4_sigma
 
 
-def Fourier_transformation(data, programe='./fortran-files/jkft50 '):
+def fourier_transformation(data, programe='./fortran-files/jkft50 '):
     """
     A function that executes a class CommandFt for a command object, 
     the result of which is the ft50.trf file with data after 
@@ -93,7 +93,7 @@ def Fourier_transformation(data, programe='./fortran-files/jkft50 '):
     return command.compile_the_files(), command.run_ft()
 
 
-def Calculate_the_noise_level():
+def calculate_the_noise_level():
     """
     A function that executes a class on a command object 
     that evaluates to the noise level for the ft50.trf data. 
