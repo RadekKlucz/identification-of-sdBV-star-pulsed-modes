@@ -13,11 +13,9 @@ import pandas as pd
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-import sys
 import function as fc
 import fourier as ft
-from comands import calculate_the_noise_level  # uncomment this line if you want to run fortran files
-
+from comands import calculate_the_noise_level
 
 class LoadAndFind:
     """
