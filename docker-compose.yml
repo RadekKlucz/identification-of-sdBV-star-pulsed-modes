@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  jupiter:
+    build:
+      context: "./main"
+      dockerfile: "jupiter.dockerfile"
+    container_name: jupiter-project
+    image: "jupyter/base-notebook"
+    volumes:
+      - ~/Documents/notebook:/home/notebook
+      
