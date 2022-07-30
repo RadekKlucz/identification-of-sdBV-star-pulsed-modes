@@ -1,12 +1,12 @@
 """
 load.py: The module with permanent important data and functions used in the main notebook.
 """
- 
+
 __name__ = "load"
 __author__ = "Radoslaw Kluczewski"
 __license__ = "MIT"
 __version__ = "1.8"
-__status__ = "production" 
+__status__ = "production"
 
 from scipy.signal import find_peaks
 import pandas as pd
@@ -17,6 +17,7 @@ import function as fc
 import fourier as ft
 from comands import calculate_the_noise_level
 
+
 class LoadAndFind:
     """
     The class contains variables and functions for loading data and finding peaks.
@@ -26,11 +27,10 @@ class LoadAndFind:
         self.data = data
         self.method = method.lower()
 
-
     def load_function(self):
         """
         Data loading function and conversion to the required data in the notebook and exporting data in periods to the output folder.        
-        
+
         :input param data: string input your data file
         :input param method: string choose method (p >>python<< or f >>fortran<<)
         :returns: list of frequencies (axis x in data), list of ppt (periods per time, axis y in data), 
@@ -43,28 +43,34 @@ class LoadAndFind:
             self.ft_data = pd.read_csv(self.data, header=None, sep='\s+')
             self.data_column_1 = self.ft_data[0]
             self.data_column_2 = self.ft_data[1]
-            self.frequencies_with_zero = ft.fourier_transformation_without_fortran(self.data_column_1, self.data_column_2)[0]
-            self.frequencies = np.array(list(filter(lambda x: x != 0, self.frequencies_with_zero)))
-            self.ppt = ft.fourier_transformation_without_fortran(self.data_column_1, self.data_column_2)[1][1:]
+            self.frequencies_with_zero = ft.fourier_transformation_without_fortran(
+                self.data_column_1, self.data_column_2)[0]
+            self.frequencies = np.array(
+                list(filter(lambda x: x != 0, self.frequencies_with_zero)))
+            self.ppt = ft.fourier_transformation_without_fortran(
+                self.data_column_1, self.data_column_2)[1][1:]
             self.noise = np.average(self.ppt) * 4
         else:
-            self.ft_data = pd.read_csv('./output/data/ft50.trf', sep='\s+', header=None)
-            self.frequencies = list(self.ft_data[0]) 
-            self.ppt = list(self.ft_data[1])  
+            self.ft_data = pd.read_csv(
+                './output/ft50.trf', sep='\s+', header=None)
+            self.frequencies = list(self.ft_data[0])
+            self.ppt = list(self.ft_data[1])
             self.noise = calculate_the_noise_level() * 4
 
         self.peaks = find_peaks(self.ppt, height=self.noise)
         self.height = self.peaks[1]['peak_heights']
-        self.peak_position = self.frequencies[self.peaks[0]]
+        self.frequencies_array = np.array(self.frequencies)
+        self.peak_position = self.frequencies_array[self.peaks[0]]
         self.periods = list(map(lambda x: 86400 / x, list(self.frequencies)))
-        self.peaks_periods = list(map(lambda x: 86400 / x, list(self.peak_position)))
-        self.export_data_periods = pd.DataFrame({'periods': self.periods, 'ppt': self.ppt})
-        self.export_data_periods.to_csv("./output/data/fourier_data_periods.trf", sep='\t', header=None)
-
+        self.peaks_periods = list(
+            map(lambda x: 86400 / x, list(self.peak_position)))
+        self.export_data_periods = pd.DataFrame(
+            {'periods': self.periods, 'ppt': self.ppt})
+        self.export_data_periods.to_csv(
+            "./output/data/fourier_data_periods.trf", sep='\t', header=None)
 
         return self.frequencies, self.ppt, self.noise, self.peaks, self.height, self.peak_position, self.periods, self.peaks_periods, \
-               self.export_data_periods
-
+            self.export_data_periods
 
 
 class SplitData(LoadAndFind):
@@ -85,12 +91,13 @@ class SplitData(LoadAndFind):
         :param lines: list of lines to graph
         """
         self.parts_frequencies = np.array_split(load_data(data, method)[0], 25)
-        self.parts_ppt = np.array_split(load_data(data, method)[1], 25) 
+        self.parts_ppt = np.array_split(load_data(data, method)[1], 25)
         self.sigmas = fc.Function.average_list(self.parts_ppt)
         self.thresholds = np.array(self.sigmas) * 4
         self.lines = list()
         for i in range(25):
-            self.lines.append([(i * 2, self.thresholds[i]), (i * 2 + 2, self.thresholds[i])])
+            self.lines.append([(i * 2, self.thresholds[i]),
+                              (i * 2 + 2, self.thresholds[i])])
 
 
 class DistanceAndHistograms(LoadAndFind):
@@ -100,7 +107,6 @@ class DistanceAndHistograms(LoadAndFind):
 
     def __init__(self, data, method):
         super().__init__(data, method)
-
 
     def calculate_the_distance_between_peaks(self):
         """
@@ -114,7 +120,6 @@ class DistanceAndHistograms(LoadAndFind):
             for j in self.peaks_periods_1[1:]:
                 self.distance_all.append(math.dist([i], [j]))
         return self.distance_all
-
 
     def limiting(self, value_1, value_2, distance=None):
         """
@@ -137,7 +142,6 @@ class DistanceAndHistograms(LoadAndFind):
                 self.limiting_full.append(i)
         return self.limiting_full
 
-
     def fitting_gauss(self, data, start_interval, end_interval, start_point_fit, end_point_fit, bins=50):
         """
         Function for fitting Gaussian functions to histograms.
@@ -151,17 +155,20 @@ class DistanceAndHistograms(LoadAndFind):
         :results: list of floating point parameters to match the histogram
         """
 
-        self.y, self.x, _ = plt.hist(data, bins, density=1, alpha=0.5, color='green')  
+        self.y, self.x, _ = plt.hist(
+            data, bins, density=1, alpha=0.5, color='green')
         self.start_trim_1 = math.floor(len(self.y) * start_interval)
         self.stop_trim_1 = math.floor(len(self.y) * end_interval)
         self.y = self.y[self.start_trim_1:self.stop_trim_1]
         self.x = self.x[self.start_trim_1:self.stop_trim_1]
-        self.H, self.A, self.x0, self.sigma = fc.Function.gauss_fit(self.x, self.y)  
+        self.H, self.A, self.x0, self.sigma = fc.Function.gauss_fit(
+            self.x, self.y)
         self.x0 = self.x0 + (self.x[1] - self.x[0]) / 2
         self.xfit = np.arange(start_point_fit, end_point_fit)
         self.yfit = list()
         for i in self.xfit:
-            self.yfit.append(fc.Function.gauss(i, self.H, self.A, self.x0, self.sigma))
+            self.yfit.append(fc.Function.gauss(
+                i, self.H, self.A, self.x0, self.sigma))
         return [self.xfit, self.yfit, self.x0, self.sigma]
 
 
@@ -179,7 +186,6 @@ class MachingMods(LoadAndFind):
         self.mean_2 = mean_2
         self.sigma_2 = sigma_2
         self.list = list
-
 
     def assing_mods(self):
         """
@@ -209,7 +215,7 @@ class MachingMods(LoadAndFind):
                 List_l += '3 '
             self.L_List.append(List_l)
         self.List_filtred = pd.DataFrame((list(load_data(self.data, self.method))[5], load_data(self.data, self.method)[7],
-                                    load_data(self.data, self.method)[4], self.L_List)).T  
+                                          load_data(self.data, self.method)[4], self.L_List)).T
         self.List_filtred[3].replace('', np.nan, inplace=True)
         self.List_filtred.dropna(subset=[3], inplace=True)
         self.List_reset = self.List_filtred.reset_index(drop=True)
@@ -221,9 +227,9 @@ class Confirm(LoadAndFind):
     """
     The class has a function for confirming mods in the chart.
     """
+
     def __init__(self, data, method):
         super().__init__(data, method)
-
 
     def run_fourier_transformation_to_confirm(self):
         """
@@ -235,8 +241,10 @@ class Confirm(LoadAndFind):
         self.ppt_1 = load_data(self.data, self.method)[1]
         self.exported = self.export_data_periods_1.loc[self.export_data_periods_1['periods'] <= 20000]
         self.export_1 = self.exported.sort_values('periods')
-        self.data_confirm = ft.fourier_transformation_without_fortran(list(self.export_1['periods']), self.ppt_1[:len(self.export_1)], 1)
-        self.export_1.to_csv('./output/data/data_confirm.trf', sep='\t', header=None, index=None)
+        self.data_confirm = ft.fourier_transformation_without_fortran(
+            list(self.export_1['periods']), self.ppt_1[:len(self.export_1)], 1)
+        self.export_1.to_csv('./output/data/data_confirm.trf',
+                             sep='\t', header=None, index=None)
         return self.data_confirm
 
 
@@ -257,8 +265,10 @@ def mods(mean, sigma, mean_1, sigma_1, mean_2, sigma_2, list, data, method):
     :results: l number list and l number list in latex format
     """
 
-    variables = MachingMods(mean, sigma, mean_1, sigma_1, mean_2, sigma_2, list, data, method)
+    variables = MachingMods(mean, sigma, mean_1, sigma_1,
+                            mean_2, sigma_2, list, data, method)
     return variables.assing_mods()
+
 
 def load_data(data, method):
     """

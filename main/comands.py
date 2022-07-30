@@ -5,12 +5,12 @@ the Fourier transform with a low-level language program. This module
 is alternative and does not need to be used for the project to work 
 properly.
 """
- 
+
 __name__ = "comands"
 __author__ = "Radoslaw Kluczewski"
 __license__ = "MIT"
 __version__ = "1.3"
-__status__ = "accomplished" 
+__status__ = "accomplished"
 
 from subprocess import run
 from os import popen
@@ -39,7 +39,7 @@ class CommandFt:
         """
 
         return run(self.permissions, shell=True, capture_output=True), \
-               run(self.compile, shell=True, capture_output=True)
+            run(self.compile, shell=True, capture_output=True)
 
     def run_ft(self):
         """
@@ -77,7 +77,8 @@ class CommandNoise:
 
         self.output = popen(self.program_noise_with_fourier_data).read()
         self.noise_string = self.output[79:90].replace('\n', '')
-        self.noise_4_sigma = float(self.noise_string)  # If you want 3 sigma muptiply by 3/4
+        # If you want 3 sigma muptiply by 3/4
+        self.noise_4_sigma = float(self.noise_string)
         return self.noise_4_sigma
 
 
@@ -101,5 +102,5 @@ def calculate_the_noise_level():
     the limitation of the jkft50 program.
     """
 
-    comand_1 = CommandNoise('./fortran-files/ftnoise ./output/fourier_data.trf 0 50')
+    comand_1 = CommandNoise('./fortran-files/ftnoise ./output/ft50.trf 0 50')
     return comand_1.run_noise()
