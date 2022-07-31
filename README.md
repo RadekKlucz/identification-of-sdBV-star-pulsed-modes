@@ -67,4 +67,6 @@ This method is recommended for people who prefer to use fortran files to calcula
 &nbsp;
 [![GitHub](https://i.stack.imgur.com/tskMh.png) RadekKlucz](https://github.com/RadekKlucz)
 
+## License
 
+[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
