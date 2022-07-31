@@ -1,5 +1,8 @@
-# Identification-of-sdBV-star-pulsed-modes (data project)
+# Identification-of-sdBV-star-pulsed-modes
 
+This is a data project that has been used in astronomical research that has helped identify the modes of stellar pulses. This Python project automates things that humans have done manually in the past. A brief theoretical introduction is available in the report catalog in English and Polish.
+
+In the basic form of the project, the fortran language was used to calculate the Fourier transform to identify the modules. The new version has the ability to calculate the Fourier transform in a python without a fortran. This method is recommended, but a first version is also available.
 
 ## 🧑‍💻 Technology stack
 
@@ -32,12 +35,12 @@ Base Jupyter Notebook Stack -- python environment to run all files and modules
 
 ## 🎆 How to run without Docker
 
-This method is recommended for people who prefer to use fortran files to calculate Fourier transform and noise using fortran files. The steps are bellow:
+This method is recommended for people who prefer to use fortran files to calculate Fourier transform and noise using fortran files. There is also a method with no fortran files, requiring only Python modules. The steps are bellow:
 
 1. Install all required modules in Python,
-2. Install gfortran on your computer,
+2. Install gfortran on your computer if you want to use fortran (optional),
 3. Clone the repository to your computer,
-4. Open in your favorite text editor main.ipynb and run it.
+4. Open main.ipynb in your favorite text editor and run it with the specified p (python) or f (fortran) method.
 
 ## 🌠 Features
 
@@ -45,7 +48,7 @@ This method is recommended for people who prefer to use fortran files to calcula
 
 🌟 **Natural Language Processing**
 
-🌟 **Data Manipulation with Pandas and numpy**
+🌟 **Data Manipulation with pandas and numpy**
 
 🌟 **Visualizing data with a matplotlib**
 
@@ -60,5 +63,8 @@ This method is recommended for people who prefer to use fortran files to calcula
 
 ## 📧 Contact
 
-[![](https://img.shields.io/twitter/url?label=/Radosław-Kluczewski/&logo=linkedin&logoColor=%230077B5&style=social&url=https%3A%2F%2Fhttps://www.linkedin.com/in/radosław-kluczewski%2F)](www.linkedin.com/in/radosław-kluczewski) [![](https://img.shields.io/twitter/url?label=/RadekKlucz&logo=github&logoColor=%2523292929&style=social&url=https://github.com/RadekKlucz)](https://github.com/RadekKlucz)
+[![LinkedIn](https://i.stack.imgur.com/gVE0j.png) Radosław Kluczewski](https:///www.linkedin.com/in/radoslaw-kluczewski) 
+&nbsp;
+[![GitHub](https://i.stack.imgur.com/tskMh.png) RadekKlucz](https://github.com/RadekKlucz)
+
 
