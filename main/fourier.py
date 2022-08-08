@@ -43,5 +43,6 @@ def fourier_transformation_without_fortran(time, amplitude, normalization_point=
     """
     The function of calculating the Fourier transform from basic data.
     """
+    
     output = FourierTransform(time, amplitude, normalization_point=6.1)
     return output.fourier_transform()

@@ -28,6 +28,7 @@ class CommandFt:
         self.compile = compile
         self.program_ft_with_the_data = program_ft_with_the_data
 
+
     def compile_the_files(self):
         """
         A function that takes arguments to grant 
@@ -40,6 +41,7 @@ class CommandFt:
 
         return run(self.permissions, shell=True, capture_output=True), \
             run(self.compile, shell=True, capture_output=True)
+
 
     def run_ft(self):
         """
@@ -62,6 +64,7 @@ class CommandNoise:
 
     def __init__(self, program_noise_with_ft50_data):
         self.program_noise_with_fourier_data = program_noise_with_ft50_data
+
 
     def run_noise(self):
         """

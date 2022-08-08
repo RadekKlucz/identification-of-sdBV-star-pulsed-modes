@@ -27,6 +27,7 @@ class LoadAndFind:
         self.data = data
         self.method = method.lower()
 
+
     def load_function(self):
         """
         Data loading function and conversion to the required data in the notebook and exporting data in periods to the output folder.        
@@ -94,10 +95,7 @@ class SplitData(LoadAndFind):
         self.parts_ppt = np.array_split(load_data(data, method)[1], 25)
         self.sigmas = fc.Function.average_list(self.parts_ppt)
         self.thresholds = np.array(self.sigmas) * 4
-        self.lines = list()
-        for i in range(25):
-            self.lines.append([(i * 2, self.thresholds[i]),
-                              (i * 2 + 2, self.thresholds[i])])
+        self.lines = [[(i * 2, self.thresholds[i]), (i * 2 + 2, self.thresholds[i])] for i in range(25)]
 
 
 class DistanceAndHistograms(LoadAndFind):
@@ -108,18 +106,19 @@ class DistanceAndHistograms(LoadAndFind):
     def __init__(self, data, method):
         super().__init__(data, method)
 
+
     def calculate_the_distance_between_peaks(self):
         """
         The function with the calculated distance between the peaks in the graph. 
 
         :returns: list of distances between the peaks
         """
-        self.distance_all = list()
+        self.distance_all = []
         self.peaks_periods_1 = load_data(self.data, self.method)[7]
         for i in self.peaks_periods_1:
-            for j in self.peaks_periods_1[1:]:
-                self.distance_all.append(math.dist([i], [j]))
+            self.distance_all.extend(math.dist([i], [j]) for j in self.peaks_periods_1[1:])
         return self.distance_all
+
 
     def limiting(self, value_1, value_2, distance=None):
         """
@@ -135,12 +134,9 @@ class DistanceAndHistograms(LoadAndFind):
             self.distance = self.calculate_the_distance_between_peaks()
         else:
             self.distance = distance
-
-        self.limiting_full = list()
-        for i in self.distance:
-            if i >= value_1 and i <= value_2:
-                self.limiting_full.append(i)
+        self.limiting_full = [i for i in self.distance if i >= value_1 and i <= value_2]
         return self.limiting_full
+
 
     def fitting_gauss(self, data, start_interval, end_interval, start_point_fit, end_point_fit, bins=50):
         """
@@ -165,10 +161,7 @@ class DistanceAndHistograms(LoadAndFind):
             self.x, self.y)
         self.x0 = self.x0 + (self.x[1] - self.x[0]) / 2
         self.xfit = np.arange(start_point_fit, end_point_fit)
-        self.yfit = list()
-        for i in self.xfit:
-            self.yfit.append(fc.Function.gauss(
-                i, self.H, self.A, self.x0, self.sigma))
+        self.yfit = [fc.Function.gauss(i, self.H, self.A, self.x0, self.sigma) for i in self.xfit]
         return [self.xfit, self.yfit, self.x0, self.sigma]
 
 
@@ -187,6 +180,7 @@ class MachingMods(LoadAndFind):
         self.sigma_2 = sigma_2
         self.list = list
 
+
     def assing_mods(self):
         """
         The function of assigning modes and numbers of detected peaks. 
@@ -203,8 +197,7 @@ class MachingMods(LoadAndFind):
         :input param method: string choose method (p >>python<< or f >>fortran<<)
         :results: l number list and l number list in latex format
         """
-
-        self.L_List = list()
+        self.L_List = []
         for i in self.list:
             List_l = str()
             if fc.Function.is_mode(i, self.mean, self.sigma, self.list):
@@ -230,6 +223,7 @@ class Confirm(LoadAndFind):
 
     def __init__(self, data, method):
         super().__init__(data, method)
+
 
     def run_fourier_transformation_to_confirm(self):
         """
