@@ -58,7 +58,7 @@ This method is recommended for people who prefer to use fortran files to calcula
     │   ├───data
     │   ├───fortran-files
     │   └───output
-    └───raports
+    └───reports
         └───latex
 
 ## 📧 Contact
